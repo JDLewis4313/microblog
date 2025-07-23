@@ -1,0 +1,23 @@
+ {% if post.language and post.language != g.locale %}
+ <br><br>
+ <span id="translation{{ post.id }}">
+                    <a href="#">{{ _('Translate') }}</a>
+ </span>
+ {% endif %}
+ <span id="post{{ post.id }}">{{ post.body }}</span>
+<table>
+    <tr valign="top">
+        <td><img src="{{ post.author.avatar(36) }}"></td>
+        <td>
+              {% set user_link %}
+                    <span class="user_popup">
+                        <a href="{{ url_for('main.user', username=post.author.username) }}">
+                            {{ post.author.username }}
+                    </a>
+                    </span>
+                {% endset %}
+
+            says:<br>{{ post.body }}
+        </td>
+    </tr>
+</table>

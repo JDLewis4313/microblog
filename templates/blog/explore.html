@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+<p>Discover posts from the community</p>
+
+{% for post in posts %}
+    {% include "blog/_post.html" %}
+{% endfor %}
+
+<!-- Pagination Links -->
+<nav>
+    {% if prev_url %}
+        <a href="{{ prev_url }}">&laquo; Newer posts</a>
+    {% endif %}
+    
+    {% if next_url %}
+        {% if prev_url %} | {% endif %}
+        <a href="{{ next_url }}">Older posts &raquo;</a>
+    {% endif %}
+</nav>
+{% endblock %}

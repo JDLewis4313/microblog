@@ -1,0 +1,148 @@
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      padding: 20px;
+      background: #f1f1f1;
+    }
+
+    header {
+      background-color: #666;
+      padding: 10px;
+      text-align: center;
+      font-size: 35px;
+      color: white;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    nav {
+      overflow: hidden;
+      background-color: #333;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    nav a {
+      float: left;
+      display: block;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    nav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    .content {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .card {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    footer {
+      padding: 20px;
+      text-align: center;
+      background: #ddd;
+      margin-top: 20px;
+    }
+
+    .column {
+      float: left;
+      width: 33.33%;
+      padding: 15px;
+    }
+
+    .row::after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+
+    @media screen and (max-width:600px) {
+      .column {
+        width: 100%;
+      }
+    }
+
+        /* Override Kit form styling to match webpage design in sign-up */
+    .formkit-form[data-uid="186065109b"] .formkit-input {
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+    }
+    
+    .formkit-form[data-uid="186065109b"] .formkit-submit {
+      padding: 10px 20px;
+      margin-top: 10px;
+      background-color: #666;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    
+    .formkit-form[data-uid="186065109b"] .formkit-submit:hover {
+      background-color: #555;
+    }
+
+        /*webpage design in blog */
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .leftcolumn {
+      flex: 75%;
+      padding-right: 20px;
+    }
+
+    .rightcolumn {
+      flex: 25%;
+    }
+
+    @media screen and (max-width: 800px) {
+      .leftcolumn, .rightcolumn {
+        flex: 100%;
+        padding-right: 0;
+      }
+    }
+    
+    div > img {
+      background-color: #aaa;
+      width: 100%;
+      padding: 20px;
+    }
+    
+#chat-bubble {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+#chat-window {
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  width: 250px;
+  height: 300px;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}

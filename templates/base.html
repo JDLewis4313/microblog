@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title if title else "Jermarcus Lewis Portfolio" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block head_extra %}{% endblock %}
+</head>
+<body>
+    <header>
+        <h1>Jermarcus Lewis Portfolio</h1>
+        <p id="welcome-message">Welcome to my Class Portfolio</p>
+        <button onclick="updateWelcome()">Update Welcome Message</button>
+    </header>
+    <hr>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>{% for message in messages %}<li>{{ message }}</li>{% endfor %}</ul>
+        {% endif %}
+    {% endwith %}
+
+    <nav id="nav">
+        <a href="{{ url_for('core.index') }}">Home</a>
+        <a href="{{ url_for('blog.blog') }}">Blog</a>
+        <a href="{{ url_for('blog.explore') }}">Explore</a>
+        <a href="{{ url_for('core.newsletter')}}">Newsletter</a>
+        
+        {% if current_user.is_authenticated %}
+            <!-- Search Form in Navigation -->
+            {% if g.search_form %}
+            <form style="display: inline;" method="GET" action="{{ url_for('core.search') }}">
+                {{ g.search_form.q(size=20, placeholder=g.search_form.q.label.text) }}
+                {{ g.search_form.hidden_tag() }}
+            </form>
+            {% endif %}
+            
+            <a href="{{ url_for('user.messages') }}">
+                Messages
+                {% set new_messages = current_user.new_messages() %}
+                <span id="message_count" class="badge"
+                      style="visibility: {% if new_messages %}visible{% else %}hidden{% endif %};">
+                    {{ new_messages }}
+                </span>
+            </a>
+            
+            <a href="{{ url_for('user.profile', username=current_user.username) }}">Profile</a>
+            <a href="{{ url_for('user.logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('user.login') }}">Login</a>
+        {% endif %}
+    </nav>
+
+    <!-- Task Progress Alerts -->
+    {% if current_user.is_authenticated %}
+        {% with tasks = current_user.get_tasks_in_progress() %}
+            {% if tasks %}
+                {% for task in tasks %}
+                    <div class="alert alert-success" role="alert">
+                        {{ task.description }}
+                        <span id="{{ task.id }}-progress">{{ task.get_progress() }}</span>%
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    {% endif %}
+
+    {% block content %}{% endblock %}
+
+    <footer>
+        <img src="{{ url_for('static', filename='icons/linkedin.png') }}" alt="LinkedIn" width="25" height="25">
+        <p>&copy; 2025 Jermarcus Lewis</p>
+    </footer>
+
+    {% block scripts %}
+    {{ moment.include_moment() }}
+    <script>
+        function translate(sourceElem, destElem, sourceLang, destLang) {
+            $(destElem).html('<span style="color: #999;">{{ _('Translating...') }}</span>');
+            $.post('/translate', {
+                text: $(sourceElem).text(),
+                source_language: sourceLang,
+                dest_language: destLang
+            }).done(function(response) {
+                $(destElem).text(response['text'])
+            }).fail(function() {
+                $(destElem).text("{{ _('Error: Could not contact server.') }}");
+            });
+        }
+
+        function set_message_count(n) {
+            $('#message_count').text(n);
+            $('#message_count').css('visibility', n ? 'visible' : 'hidden');
+        }
+
+        function set_task_progress(task_id, progress) {
+            $('#' + task_id + '-progress').text(progress);
+        }
+
+        function updateWelcome() {
+            document.getElementById("welcome-message").innerText =
+                "Excited to share my journey with Flask, Django, and Java!";
+        }
+
+        {% if current_user.is_authenticated %}
+        $(function() {
+            var since = 0;
+            setInterval(function() {
+                $.ajax('{{ url_for('user.notifications') }}?since=' + since).done(
+                    function(notifications) {
+                        for (var i = 0; i < notifications.length; i++) {
+                            switch (notifications[i].name) {
+                                case 'unread_message_count':
+                                    set_message_count(notifications[i].data);
+                                    break;
+                                case 'task_progress':
+                                    set_task_progress(notifications[i].data.task_id, notifications[i].data.progress);
+                                    break;
+                            }
+                            since = notifications[i].timestamp;
+                        }
+                    }
+                );
+            }, 10000);
+        });
+        {% endif %}
+    </script>
+    {% endblock %}
+</body>
+</html>

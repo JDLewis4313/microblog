@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>📬 Join the Journey</h1>
+
+<div class="card">
+  <p>Subscribe for weekly updates on Flask projects, debugging lessons, and developer milestones.</p>
+
+  <!-- Newsletter Signup Form -->
+  <form action="https://app.kit.com/forms/8320789/subscriptions"
+        method="post"
+        class="formkit-form"
+        data-sv-form="8320789"
+        data-uid="186065109b"
+        data-format="inline"
+        data-version="5">
+    
+    <div class="formkit-field">
+      <input class="formkit-input" type="email" name="email_address"
+             placeholder="Enter your email address" required>
+    </div>
+    
+    <button class="formkit-submit" id="form-feedback">
+      Join the Journey
+    </button>
+  </form>
+
+  <p><small>Weekly updates • No spam • Unsubscribe anytime</small></p>
+</div>
+
+<script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector(".formkit-form");
+    const feedback = document.getElementById("form-feedback");
+    form.addEventListener("submit", function () {
+      feedback.textContent = "Thanks for joining the journey!";
+    });
+  });
+</script>
+{% endblock %}

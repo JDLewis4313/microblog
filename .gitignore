@@ -1,0 +1,35 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.sqlite3
+*.db
+*.log
+
+# Environment
+.env
+*.env
+.venv/
+venv/
+genius_env/
+
+# Static/media
+staticfiles/
+media/
+
+# IDE and OS
+*.swp
+*.DS_Store
+.idea/
+.vscode/
+
+# Testing
+htmlcov/
+.coverage
+*.pytest_cache/
+
+# Build
+dist/
+build/
+
+# Supervisor
+supervisor/conf.d/

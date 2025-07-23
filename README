@@ -1,0 +1,201 @@
+# Flask Minimal Boilerplate
+
+A lightweight, ready-to-fork foundation for building Flask applications with environment-based configuration, Blueprints, and SQLAlchemy support.
+
+---
+
+## Prerequisites
+
+- Python 3.8+  
+- pip or pipenv  
+- virtualenv or venv  
+
+---
+
+## Installation
+
+1. Clone this repository  
+   ```bash
+   git clone <your-repo-url> flask-minimal
+   cd flask-minimal
+   ```
+
+2. Create and activate a virtual environment  
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate    # on Windows: venv\Scripts\activate
+   ```
+
+3. Install dependencies  
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Copy or create your `.env` file  
+   ```bash
+   cp .env.example .env
+   ```
+
+---
+
+## Project Structure
+
+```
+flask-minimal/
+├── app.py
+├── config/
+│   └── settings.py
+├── .env
+├── apps/
+│   ├── extensions.py
+│   └── core/
+│       └── routes.py
+├── templates/
+│   ├── base.html
+│   └── core/
+│       └── index.html
+└── db/
+    └── app.db
+```
+
+---
+
+## Environment Variables
+
+Create a file named `.env` in the project root with:
+
+```ini
+FLASK_APP=app:app
+FLASK_ENV=development
+
+SECRET_KEY="your-super-secret-key"
+DEBUG=True
+
+# Use 3 slashes for a relative path inside the project
+DATABASE_URL=sqlite:///db/app.db
+```
+
+- `FLASK_APP`: Points Flask CLI at `app.py`’s `app` object.  
+- `FLASK_ENV`: Enables development mode (auto-reload, debugger).  
+- `SECRET_KEY`: Used for sessions and CSRF protection.  
+- `DATABASE_URL`: SQLAlchemy URI for your database.
+
+---
+
+## Running the Application
+
+1. Ensure you’re in the project root (same folder as `app.py`)  
+2. Clear any stray exports  
+   ```bash
+   unset FLASK_APP FLASK_ENV PYTHONPATH
+   ```
+3. (Re)load environment variables  
+   ```bash
+   source .env
+   ```
+4. Start with Flask CLI  
+   ```bash
+   flask run
+   ```
+5. Or run directly  
+   ```bash
+   python app.py
+   ```
+
+The app will be available at:  
+http://127.0.0.1:5000/
+
+---
+
+## Application Components
+
+### app.py
+
+```python
+from flask import Flask, render_template
+from config.settings import Config
+from apps.extensions import db
+from apps.core.routes import core_bp
+
+app = Flask(__name__)
+app.config.from_object(Config)
+
+# initialize extensions
+db.init_app(app)
+
+# register Blueprints
+app.register_blueprint(core_bp)
+
+if __name__ == "__main__":
+    app.run(debug=app.config["DEBUG"])
+```
+
+### config/settings.py
+
+```python
+from decouple import config
+
+class Config:
+    DEBUG = config("DEBUG", default=False, cast=bool)
+    SECRET_KEY = config("SECRET_KEY")
+    SQLALCHEMY_DATABASE_URI = config("DATABASE_URL")
+```
+
+### apps/extensions.py
+
+```python
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()
+```
+
+### apps/core/routes.py
+
+```python
+from flask import Blueprint, render_template
+
+core_bp = Blueprint("core", __name__, template_folder="../../templates/core")
+
+@core_bp.route("/")
+def home():
+    return render_template("core/index.html")
+```
+
+### templates/base.html
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title or "Flask App" }}</title>
+  </head>
+  <body>
+    {% block body %}{% endblock %}
+  </body>
+</html>
+```
+
+### templates/core/index.html
+
+```html
+{% extends "base.html" %}
+
+{% block body %}
+  <p>Hello, world!</p>
+{% endblock %}
+```
+
+---
+
+## Future Enhancements
+
+- Add Flask-Migrate for database migrations  
+- Structure additional Blueprints (e.g. `user`, `blog`)  
+- Integrate Flask-Login for authentication  
+- Write unit tests with pytest  
+- Dockerize the application  
+- Add error handlers and logging setup  
+
+---
+
+Feel free to fork, adapt, and expand this README as your project grows. Happy coding!

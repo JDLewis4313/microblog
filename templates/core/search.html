@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ _('Search Results') }}</h1>
+    {% if posts %}
+        {% for post in posts %}
+            {% include "blog/_post.html" %}
+        {% endfor %}
+        
+        <!-- Pagination Links -->
+        <nav>
+            {% if prev_url %}
+                <a href="{{ prev_url }}">&laquo; {{ _('Newer posts') }}</a>
+            {% endif %}
+            
+            {% if next_url %}
+                {% if prev_url %} | {% endif %}
+                <a href="{{ next_url }}">{{ _('Older posts') }} &raquo;</a>
+            {% endif %}
+        </nav>
+    {% else %}
+        <p>{{ _('No posts found.') }}</p>
+    {% endif %}
+    
+    <p><a href="{{ url_for('blog.explore') }}">{{ _('Back to Explore') }}</a></p>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if current_user.is_authenticated %}
+    <h1>Hi, {{ current_user.username }}!</h1>
+    <p><a href="{{ url_for('user.profile', username=current_user.username) }}">Your Profile</a></p>
+    <p><a href="{{ url_for('blog.blog') }}">Blog</a></p>
+    <p><a href="{{ url_for('blog.explore') }}">Explore</a></p>
+{% else %}
+    <h1>Welcome to Microblog</h1>
+    <p>Please <a href="{{ url_for('user.login') }}">log in</a> or <a href="{{ url_for('user.register') }}">register</a></p>
+{% endif %}
+{% endblock %}
